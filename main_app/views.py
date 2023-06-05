@@ -19,12 +19,8 @@ def pokemon_index(request):
 
 def pokemon_detail(request, pokemon_id):
   pokemon = Pokemon.objects.get(id=pokemon_id)
-  # First, create a list of the item ids that the pokemon DOES have
   id_list = pokemon.items.all().values_list('id')
-  # Query for the items that the pokemon doesn't have
-  # by using the exclude() method vs. the filter() method
   items_pokemon_doesnt_have = Item.objects.exclude(id__in=id_list)
-  # instantiate FeedingForm to be rendered in detail.html
   feeding_form = FeedingForm()
   return render(request, 'pokemon/detail.html', {
     'pokemon': pokemon, 'feeding_form': feeding_form,
@@ -49,10 +45,6 @@ def add_feeding(request, pokemon_id):
   form = FeedingForm(request.POST)
   # validate the form
   if form.is_valid():
-    # We want a model instance, but
-    # we can't save to the db yet
-    # because we have not assigned the
-    # pokemon_id FK.
     new_feeding = form.save(commit=False)
     new_feeding.pokemon_id = pokemon_id
     new_feeding.save()

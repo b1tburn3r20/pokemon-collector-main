@@ -26,13 +26,8 @@ class Pokemon(models.Model):
   breed = models.CharField(max_length=100)
   description = models.TextField(max_length=250)
   age = models.IntegerField()
-  # Create a M:M relationship with Item
-  # items is the Related Manager
   items = models.ManyToManyField(Item)
 
-  # Changing this instance method
-  # does not impact the database, therefore
-  # no makemigrations is necessary
   def __str__(self):
     return f'{self.name} ({self.id})'
 
@@ -50,7 +45,6 @@ class Feeding(models.Model):
     choices=MEALS,
     default=MEALS[0][0]
   )
-  # Create a pokemon_id FK
   pokemon = models.ForeignKey(
     Pokemon,
     on_delete=models.CASCADE
